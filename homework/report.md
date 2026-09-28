@@ -89,8 +89,10 @@ int main() {
 ### 編譯與執行指令
 
 ```powershell
-g++ -std=c++17 -o hw1_problem1.exe hw1_problem1.cpp
-.\hw1_problem1.exe
+$ g++ -std=c++17 hw1_problem1.cpp -o hw1_problem1.exe
+$ .\hw1_problem1.exe
+3 :Recursive
+3 :Iterative
 ```
 
 執行結果：
@@ -183,8 +185,12 @@ int main() {
 ### 編譯與執行指令
 
 ```powershell
-g++ -std=c++17 -o hw1_problem2.exe hw1_problem2.cpp
-.\hw1_problem2.exe
+$ g++ -std=c++17 hw1_problem2.cpp -o hw1_problem2.exe
+$ .\hw1_problem2.exe
+{}
+{b}
+{a}
+{a,b}
 ```
 
 當 S = "ab" 時，執行結果為：
