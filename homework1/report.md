@@ -125,10 +125,13 @@ $ .\hw1_problem1.exe
 宣告 `powerSet` 函式，使用三個參數：
 
 1. `S`：原本的集合。
-2. `index`：目前處理到第幾個元素。
+2. `index`：還有幾個元素尚未處理。
 3. `current`：目前已選入的元素。
 
-每次呼叫函式時，先處理「不選 `S[index]`」，再處理「選 `S[index]`」。如果 `index` 已經等於 `S.size()`，表示所有元素都處理完，就印出 `current`。
+
+每次呼叫函式時，先處理「不選 `S[index - 1]`」，再處理「選入 `S[index - 1]`」，並將 `index` 減 1。如果 `index == 0`，表示所有元素都處理完，就印出 `current`。
+
+`current` 以值傳遞，選入元素時使用 `S[index - 1] + current`，把字元放在字串前面，因此子集合中的字元仍保持原本的順序，也不需要在函式返回後移除元素。
 
 `current` 以值傳遞，因此選入元素時可以直接使用 `current + S[index]` 產生新的字串，不需要在函式返回後移除元素。
 
@@ -142,7 +145,7 @@ $ .\hw1_problem1.exe
 using namespace std;
 
 void powerSet(const string S, size_t index, string current) {
-    if (index == S.size()){                    // 停止條件：所有元素都處理完了
+    if (index == 0){                    // 停止條件：所有元素都處理完了
         cout << "{";
         for(size_t i = 0;i < current.size();i++){
             if(i>0) cout << ",";
@@ -151,15 +154,16 @@ void powerSet(const string S, size_t index, string current) {
         cout << "}" << '\n';
         return;
     }
-    powerSet(S, index + 1, current);
-    powerSet(S, index + 1, current + S[index]);
+    powerSet(S, index - 1, current);
+    powerSet(S, index - 1, S[index - 1] + current);
 
 }
 
 int main() {
-    string S = "ab";
+    string S = "";
+    cin >> S;
     string current;
-    powerSet(S, 0, current);
+    powerSet(S, S.size(), current);
 }
 ```
 
@@ -188,22 +192,23 @@ int main() {
 ```powershell
 $ g++ -std=c++17 hw1_problem2.cpp -o hw1_problem2.exe
 $ .\hw1_problem2.exe
+ab
 {}
-{b}
 {a}
+{a\b}
 {a,b}
 ```
 
-當 `S = "ab"` 時，執行結果為：
+本題以輸入 `ab` 作為範例，結果共有 $2^2 = 4$ 個子集合。
 
 ```text
 {}
-{b}
 {a}
+{b}
 {a,b}
 ```
 
 ## 申論及開發報告
 
 冪集合需要考慮每個元素「選」與「不選」兩種情況，因此使用遞迴處理。每處理一個元素，就分別呼叫函式處理這兩種選擇；當所有元素都處理完，再印出目前的子集合。
-我使用 `string` 保存原集合和目前選到的字元。`current` 以值傳遞，選入元素時可以把新字元接在字串後面，原本的 `current` 不會改變，所以不需要另外寫還原步驟。這種寫法較容易看出每次遞迴分成兩條路，但呼叫函式時會複製字串，是目前程式在空間使用上的限制。
+我使用 `string` 保存原集合和目前選到的字元。`current` 以值傳遞，選入元素時把新字元放在字串前面，讓子集合中的字元保持原本的順序。原本的 `current` 不會改變，所以不需要另外寫還原步驟。這種寫法較容易看出每次遞迴分成兩條路，但呼叫函式時會複製字串，是目前程式在空間使用上的限制。
